@@ -34,25 +34,29 @@ document.addEventListener('DOMContentLoaded', function() {
             user_id: userId
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        // Log the raw response for debugging
+        console.log('Response status:', response.status);
+        console.log('Response headers:', Array.from(response.headers.entries()));
+
+        // Try to get the text first for logging
+        return response.text().then(text => {
+            console.log('Response text:', text);
+            try {
+                // Try to parse the text as JSON
+                return JSON.parse(text);
+            } catch (parseError) {
+                console.error('Failed to parse JSON:', parseError);
+                throw new Error('Invalid JSON response: ' + text);
+            }
+        });
+    })
     .then(data => {
         if (data.status === 'success') {
             // Show success message
             if (statusMessage) {
                 statusMessage.innerText = 'Subscription confirmed! Your bot access has been upgraded.';
                 statusMessage.className = 'success';
-
-                // Add more detailed information
-                const statusContainer = document.getElementById('status-container');
-                if (statusContainer) {
-                    const detailsDiv = document.createElement('div');
-                    detailsDiv.className = 'details';
-                    detailsDiv.innerHTML = `
-                        <p>Your subscription has been successfully activated. You can now enjoy all the premium features!</p>
-                        <p>If you don't see the upgraded features immediately, please allow up to 5 minutes for the changes to take effect or restart your Discord client.</p>
-                    `;
-                    statusContainer.appendChild(detailsDiv);
-                }
             }
             console.log('Subscription verified successfully');
         } else {
@@ -65,11 +69,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     })
     .catch(error => {
+        // More detailed error handling
+        console.error('Full error:', error);
+
         // Show error message
         if (statusMessage) {
-            statusMessage.innerText = 'Error contacting the server. Please contact support.';
+            statusMessage.innerText = 'Error contacting the server. Please contact support.' +
+                                      (error.message ? ` (${error.message})` : '');
             statusMessage.className = 'error';
         }
-        console.error('Fetch error:', error);
     });
 });
