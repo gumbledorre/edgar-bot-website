@@ -2,79 +2,93 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Subscription Successful</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Success - Edgar Bot</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
+            line-height: 1.6;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            text-align: center;
-            background-color: #f0f0f0;
+            color: #333;
         }
         .container {
-            background-color: white;
-            border-radius: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
             padding: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        .success-icon {
-            color: #4CAF50;
-            font-size: 72px;
-            margin-bottom: 20px;
+        h1 {
+            color: #2E86C1;
+            margin-top: 0;
         }
-        .btn {
+        .success {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .info {
+            color: #3498db;
+        }
+        .spinner {
             display: inline-block;
-            background-color: #4CAF50;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: #2E86C1;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .button {
+            display: inline-block;
+            background-color: #2E86C1;
             color: white;
             padding: 10px 20px;
             text-decoration: none;
             border-radius: 5px;
             margin-top: 20px;
+            font-weight: bold;
+        }
+        .button:hover {
+            background-color: #1a5276;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="success-icon">✓</div>
-        <h1>Subscription Successful!</h1>
+        <h1>Subscription Confirmed!</h1>
+
         <p>Thank you for subscribing to Edgar Bot. Your payment has been processed successfully.</p>
-        <p>You can now enjoy all the premium features in our Discord bot.</p>
-        <a href="https://discord.com/app" class="btn">Return to Discord</a>
+
+        <div id="status-container">
+            <div class="spinner"></div>
+            <span id="status-message" class="info">Verifying your subscription...</span>
+        </div>
+
+        <p>What happens next:</p>
+        <ol>
+            <li>Your subscription is being verified with our system</li>
+            <li>Your Discord bot will be automatically upgraded</li>
+            <li>You'll have immediate access to all features in your subscription tier</li>
+        </ol>
+
+        <p>You can now return to Discord and continue using the Edgar Bot with your enhanced features.</p>
+
+        <p>If you have any questions or need assistance, please type <code>/feedback</code> in your Discord chat with the bot.</p>
+
+        <a href="https://discord.com/app" class="button">Return to Discord</a>
     </div>
 
-    <script>
-        // Verify the checkout session
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const sessionId = urlParams.get('session_id');
-            const userId = urlParams.get('user_id');
-
-            if (sessionId && userId) {
-                // Send verification request to your backend
-                fetch('/verify-checkout', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        session_id: sessionId,
-                        user_id: userId
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        console.log('Checkout verified successfully');
-                    } else {
-                        console.error('Checkout verification failed');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            }
-        });
-    </script>
+    <!-- Script to verify the subscription -->
+    <script src="js/success.js"></script>
 </body>
 </html>
