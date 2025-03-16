@@ -41,6 +41,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (statusMessage) {
                 statusMessage.innerText = 'Subscription confirmed! Your bot access has been upgraded.';
                 statusMessage.className = 'success';
+
+                // Add more detailed information
+                const statusContainer = document.getElementById('status-container');
+                if (statusContainer) {
+                    const detailsDiv = document.createElement('div');
+                    detailsDiv.className = 'details';
+                    detailsDiv.innerHTML = `
+                        <p>Your subscription has been successfully activated. You can now enjoy all the premium features!</p>
+                        <p>If you don't see the upgraded features immediately, please allow up to 5 minutes for the changes to take effect or restart your Discord client.</p>
+                    `;
+                    statusContainer.appendChild(detailsDiv);
+                }
             }
             console.log('Subscription verified successfully');
         } else {
